@@ -6,11 +6,20 @@
 <?php
 
 error_reporting(E_ALL);
+class SimpleClass{
 
-writeTimestamp();
+public $stmt;
+public $link;
+
+    public function __construct(){
+        $this->link = mysqli_connect("localhost", "root", "", "timestamp");
+    }
 
     function writeTimestamp(){
-        dbConnectionEstab();
+        $this->dbConnectionEstab();
+        $this->prepareStatement();
+        $this->executeStatement("", $this->timestamp(), "test");
+        $this->dbConnectionClose();
     }
 
     function timestamp(){
@@ -21,21 +30,44 @@ writeTimestamp();
     }
 
     function dbConnectionEstab (){
-        $link = mysqli_connect("localhost", "root", "", "timestamp");
-        if (!$link) {
+
+        if (!$this->link) {
             die('Verbindung schlug fehl: ' . mysqli_connect_error() . PHP_EOL);
             //return $message;
         }
         else {
             echo 'Erfolgreich verbunden';
             //mysql_close($link);
+            //return $link;
         }
     }
 
     function dbConnectionClose (){
-        mysql_close($link);
+        mysqli_close($this->link);
     }
 
+    function prepareStatement(){
+        $query = "INSERT INTO zeiten (id, timestamp, comment) VALUES (?,?,?)";
+        $this->stmt = $this->link->prepare($query);
+        return $this->stmt;
+    }
+
+    function executeStatement($val1, $val2, $val3){
+        $this->stmt->bind_param("sss", $val1, $val2, $val3);
+
+    //$val1 = 'id';
+    //$val2 = 'DEU';
+    //$val3 = 'Baden-Wuerttemberg';
+
+    /* Execute the statement */
+    $this->stmt->execute();
+    var_dump ($this->stmt->execute());
+    }
+
+    //writeTimestamp();
+}
+$start = new SimpleClass();
+$start->writeTimestamp();
 ?>
 </body>
 </html>
