@@ -10,6 +10,7 @@ class SimpleClass{
 
 public $stmt;
 public $link;
+public $preis;
 
     public function __construct(){
         $this->link = mysqli_connect("localhost", "root", "", "timestamp");
@@ -18,7 +19,7 @@ public $link;
     function writeTimestamp(){
         $this->dbConnectionEstab();
         $this->prepareStatement();
-        $this->executeStatement("", $this->timestamp(), "");
+        $this->executeStatement("", $this->timestamp(), $this->preisZufall());
         $this->dbConnectionClose();
     }
 
@@ -70,7 +71,14 @@ public $link;
         $this->stmt->execute();
     }
 
-    //writeTimestamp();
+    function checkDB() {
+
+    }
+
+    function preisZufall(){
+        $this->preis = rand(300, 630)/100;
+        return $this->preis;
+    }
 }
 $start = new SimpleClass();
 $start->writeTimestamp();
