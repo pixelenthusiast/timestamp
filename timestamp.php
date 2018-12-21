@@ -18,32 +18,39 @@ public $link;
     function writeTimestamp(){
         $this->dbConnectionEstab();
         $this->prepareStatement();
-        $this->executeStatement("", $this->timestamp(), "test");
+        $this->executeStatement("", $this->timestamp(), "");
         $this->dbConnectionClose();
     }
 
     function timestamp(){
         $date = date_create();
         //echo date_format($date, 'U = Y-m-d H:i:s') . "\n";
-        $help = date_format($date, 'Y-m-d H:i:s') . "\n";
+        $help = date_format($date, 'Y-m-d H:i:s');
         return $help;
     }
 
     function dbConnectionEstab (){
 
         if (!$this->link) {
-            die('Verbindung schlug fehl: ' . mysqli_connect_error() . PHP_EOL);
+            die('Verbindung schlug fehl: ' . mysqli_connect_error(). "<br>" . PHP_EOL);
             //return $message;
         }
         else {
-            echo 'Erfolgreich verbunden';
+            echo 'Erfolgreich verbunden'. "<br>";
             //mysql_close($link);
             //return $link;
         }
     }
 
     function dbConnectionClose (){
-        mysqli_close($this->link);
+        $check = mysqli_close($this->link);
+        if ($check) {
+            echo 'Verbindung erfolgreich geschlossen'. "<br>";
+        }
+        else {
+            echo 'Verbindung konnte nicht geschlossen werden'. "<br>";
+            echo $check["connect_error"];
+        }
     }
 
     function prepareStatement(){
@@ -55,13 +62,12 @@ public $link;
     function executeStatement($val1, $val2, $val3){
         $this->stmt->bind_param("sss", $val1, $val2, $val3);
 
-    //$val1 = 'id';
-    //$val2 = 'DEU';
-    //$val3 = 'Baden-Wuerttemberg';
-
-    /* Execute the statement */
-    $this->stmt->execute();
-    var_dump ($this->stmt->execute());
+        //$val1 = 'id';
+        //$val2 = 'DEU';
+        //$val3 = 'Baden-Wuerttemberg';
+        echo 'Schreibe in Datenbank'. "<br>";
+        /* Execute the statement */
+        $this->stmt->execute();
     }
 
     //writeTimestamp();
