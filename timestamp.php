@@ -44,8 +44,8 @@ public $preis;
     }
 
     function dbConnectionClose (){
-        $check = mysqli_close($this->link);
-        if ($check) {
+        //$check = mysqli_close($this->link);
+        if (mysqli_close($this->link) === TRUE) {
             echo 'Verbindung erfolgreich geschlossen'. "<br>";
         }
         else {
@@ -66,9 +66,11 @@ public $preis;
         //$val1 = 'id';
         //$val2 = 'DEU';
         //$val3 = 'Baden-Wuerttemberg';
-        echo 'Schreibe in Datenbank'. "<br>";
+        if ($this->stmt->execute() === TRUE) {
+            echo 'Schreibe in Datenbank'. "<br>";
+        }
         /* Execute the statement */
-        $this->stmt->execute();
+        //$this->stmt->execute();
     }
 
     function checkDB() {
